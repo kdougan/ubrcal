@@ -37,3 +37,5 @@ class ProductionConfig(Config):
     if CLEARDB_DATABASE_URL:
         SQLALCHEMY_DATABASE_URI = CLEARDB_DATABASE_URL.replace(
             'mysql', 'mysql+pymysql')
+        if '?' in SQLALCHEMY_DATABASE_URI:
+            SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI.split('?')[0]
