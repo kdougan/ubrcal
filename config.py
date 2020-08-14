@@ -32,10 +32,8 @@ class ProductionConfig(Config):
     DB_PASSWORD = os.getenv('DB_PASSWORD')
     DB_HOST = os.getenv('DB_HOST')
     DB_DATABASE = os.getenv('DB_DATABASE')
-    CLEARDB_DATABASE_URL = os.getenv('CLEARDB_DATABASE_URL')
+    JAWSDB_MARIA_URL = os.getenv('JAWSDB_MARIA_URL')
     SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{DB_DATABASE}'
-    if CLEARDB_DATABASE_URL:
-        SQLALCHEMY_DATABASE_URI = CLEARDB_DATABASE_URL.replace(
+    if JAWSDB_MARIA_URL:
+        SQLALCHEMY_DATABASE_URI = JAWSDB_MARIA_URL.replace(
             'mysql', 'mysql+pymysql')
-        if '?' in SQLALCHEMY_DATABASE_URI:
-            SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI.split('?')[0]
