@@ -7,7 +7,6 @@ class User(db.Model):
     username = db.Column(db.String(256), index=True, nullable=False)
     email = db.Column(db.String(256), index=True, unique=True, nullable=False)
     name = db.Column(db.String(256))
-    last_name = db.Column(db.String(256))
     public = db.Column(db.Boolean(), default=False)
     last_access = db.Column(db.DateTime(), server_default=db.func.now())
     created = db.Column(db.DateTime(), server_default=db.func.now())

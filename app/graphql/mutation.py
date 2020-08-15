@@ -59,14 +59,14 @@ class RefreshMutation(graphene.Mutation):
 
 class CreateUser(graphene.Mutation):
     class Arguments:
+        email = graphene.String(required=True)
         username = graphene.String(required=True)
-        name = graphene.String(required=True)
-        last_name = graphene.String(required=True)
+        name = graphene.String()
 
     user = graphene.Field(lambda: User)
 
-    def mutate(self, info, username, name, last_name):
-        user = UserModel(username=username, name=name, last_name=last_name)
+    def mutate(self, info, email, username, name):
+        user = UserModel(username=username, name=name, email=email)
 
         db.session.add(user)
         db.session.commit()
