@@ -4,9 +4,13 @@ from app import db
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(256), index=True, unique=True)
+    username = db.Column(db.String(256), index=True, nullable=False)
+    email = db.Column(db.String(256), index=True, unique=True, nullable=False)
     name = db.Column(db.String(256))
     last_name = db.Column(db.String(256))
+    public = db.Column(db.Boolean(), default=False)
+    last_access = db.Column(db.DateTime(), server_default=db.func.now())
+    created = db.Column(db.DateTime(), server_default=db.func.now())
     profile_id = db.Column(db.Integer, db.ForeignKey('profiles.id'))
     profile = db.relationship('Profile')
 
