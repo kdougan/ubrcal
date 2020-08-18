@@ -175,16 +175,23 @@ class CreateEvent(graphene.Mutation):
         name = graphene.String(required=True)
         calendar_id = graphene.ID(required=True)
         start = graphene.DateTime(required=True)
-        end = graphene.DateTime(required=True)
+        end = graphene.DateTime()
+        duration = graphene.Int()
         rrule = graphene.String()
         description = graphene.String()
 
     event = graphene.Field(lambda: Event)
 
-    def mutate(self, info, name, calendar_id, start, end, description=None, rrule=None):
+    def mutate(self, info, name, calendar_id, start, end=None, duration=None, description=None, rrule=None):
         calendar_id = from_global_id(calendar_id)
         calendar = CalendarModel.query.get(calendar_id[1])
-        duration = (end - start).seconds // 60 % 60
+        if not end or (duration and duration > 0):
+            raise GraphQLError(
+                'You must specify either an end date or duration in minutes!')
+        if end:
+            duration = (end - start).seconds // 60 % 60
+        elif duration:
+            end = start + timedelta(minutes=duration)
         if rrule:
             rrule_obj = rrulestr(rrule)
         event = EventModel(name=name,
