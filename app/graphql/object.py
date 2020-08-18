@@ -1,13 +1,17 @@
 import graphene
+from dateutil.rrule import rrulestr
+from datetime import datetime
 from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from sqlalchemy import and_
+from sqlalchemy import or_
 
 from app.model import Profile as ProfileModel
-from app.model import Skill as SkillModel
 from app.model import User as UserModel
 from app.model import Calendar as CalendarModel
 from app.model import Event as EventModel
+from app.model import Queue as QueueModel
+from app.model import QueuedUser as QueuedUserModel
 
 
 class User(SQLAlchemyObjectType):
@@ -36,30 +40,6 @@ class Profile(SQLAlchemyObjectType):
         model = ProfileModel
         interfaces = (relay.Node,)
 
-    skills = graphene.List(
-        lambda: Skill, name=graphene.String(), score=graphene.Int())
-
-    def resolve_skills(self, info, name=None, score=None):
-        query = Skill.get_query(info=info)
-        qyery = query.filter(SkillModel.profile_id == self.id)
-        if name:
-            query = query.filter(SkillModel.name == name)
-        if score:
-            query = query.filter(SkillModel.score == score)
-
-        return query.all()
-
-
-class Skill(SQLAlchemyObjectType):
-    class Meta:
-        model = SkillModel
-        interfaces = (relay.Node,)
-
-
-class SkillInput(graphene.InputObjectType):
-    name = graphene.String()
-    score = graphene.Int()
-
 
 class Calendar(SQLAlchemyObjectType):
     class Meta:
@@ -71,9 +51,16 @@ class Calendar(SQLAlchemyObjectType):
 
     def resolve_events(self, info, start, end):
         query = Event.get_query(info=info)
-        query = query.filter(and_(EventModel.id == self.id,
-                                  EventModel.start <= end,
-                                  EventModel.end >= start))
+        query.filter(
+            and_(
+                EventModel.id == self.id,
+                or_(
+                    and_(EventModel.start <= end, EventModel.end >= start),
+                    and_(EventModel.start <= end,
+                         or_(EventModel.rend == None, EventModel.start <= EventModel.rend))
+                )
+            )
+        )
         return query.all()
 
 
@@ -82,7 +69,29 @@ class Event(SQLAlchemyObjectType):
         model = EventModel
         interfaces = (relay.Node,)
 
+    queues = graphene.List(lambda: Queue)
+
+    def resolve_queues(self, info):
+        return self.queues
+
 
 class EventInput(graphene.InputObjectType):
     start = graphene.Date()
     end = graphene.Date()
+
+
+class Queue(SQLAlchemyObjectType):
+    class Meta:
+        model = QueueModel
+        interfaces = (relay.Node,)
+
+    users = graphene.List(lambda: QueuedUser)
+
+    def resolve_users(self, info):
+        return self.users
+
+
+class QueuedUser(SQLAlchemyObjectType):
+    class Meta:
+        model = QueuedUserModel
+        interfaces = (relay.Node,)
