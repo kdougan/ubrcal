@@ -74,7 +74,7 @@ class CreateUser(graphene.Mutation):
 
     def mutate(self, info, email, username, name=None):
         user = UserModel(username=username, email=email)
-        profile = Profile(name=name)
+        profile = ProfileModel(name=name)
         db.session.add(user)
         db.session.add(profile)
         user.profile = profile
