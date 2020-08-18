@@ -71,7 +71,7 @@ class Event(db.Model):
     start = db.Column(db.DateTime, index=True)
     end = db.Column(db.DateTime, index=True)
     duration = db.Column(db.Integer)
-    rrule = db.Column(db.Text, nullable=False)
+    rrule = db.Column(db.Text)
     rend = db.Column(db.Date, index=True)
     created = db.Column(db.DateTime(), server_default=db.func.now())
     meta = db.Column(db.JSON, default={})
