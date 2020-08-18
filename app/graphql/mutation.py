@@ -187,7 +187,7 @@ class CreateEvent(graphene.Mutation):
     def mutate(self, info, name, calendar_id, start, end=None, duration=None, description=None, rrule=None):
         calendar_id = from_global_id(calendar_id)
         calendar = CalendarModel.query.get(calendar_id[1])
-        if not end and (not duration or duration > 0):
+        if not end and (not duration or duration <= 0):
             raise GraphQLError(
                 'You must specify either an end date or duration in minutes!')
         if end:
