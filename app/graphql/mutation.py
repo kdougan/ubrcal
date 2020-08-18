@@ -180,11 +180,12 @@ class CreateEvent(graphene.Mutation):
         end = graphene.DateTime()
         duration = graphene.Int()
         rrule = graphene.String()
+        rend = graphene.Date()
         description = graphene.String()
 
     event = graphene.Field(lambda: Event)
 
-    def mutate(self, info, name, calendar_id, start, end=None, duration=None, description=None, rrule=None):
+    def mutate(self, info, name, calendar_id, start, end=None, duration=None, description=None, rrule=None, rend=None):
         calendar_id = from_global_id(calendar_id)
         calendar = CalendarModel.query.get(calendar_id[1])
         if not end and not (duration and duration > 0):
@@ -202,7 +203,8 @@ class CreateEvent(graphene.Mutation):
                            start=start,
                            end=end,
                            duration=duration,
-                           rrule=rrule)
+                           rrule=rrule,
+                           rend=rend)
         db.session.add(event)
         db.session.commit()
         return CreateEvent(event=event)
