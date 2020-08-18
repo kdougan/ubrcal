@@ -72,7 +72,7 @@ class CreateUser(graphene.Mutation):
 
     user = graphene.Field(lambda: User)
 
-    def mutate(self, info, email, username, name):
+    def mutate(self, info, email, username, name=None):
         user = UserModel(username=username, name=name, email=email)
 
         db.session.add(user)
