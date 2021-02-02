@@ -4,26 +4,13 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pylint = "*"
 autopep8 = "*"
-honcho = "*"
+pylint = "*"
 
 [packages]
 flask = "*"
-flask-script = "*"
-flask-sqlalchemy = "*"
-pymysql = "*"
-graphene = "*"
-flask-graphql = "*"
-gunicorn = "*"
-python-dotenv = "*"
-graphene-sqlalchemy = "*"
-flask-jwt-extended = "*"
-flask-graphql-auth = "*"
-flask-migrate = "*"
+faunadb = "*"
+flask-cors = "*"
 
 [requires]
 python_version = "3.7"
-
-[scripts]
-serve = "honcho start"

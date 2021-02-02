@@ -1,0 +1,29 @@
+@import '/src/style/ubrcal.scss';
+
+:root {
+  --fc-border-color: rgba(0, 0, 0, 0.5);
+  --fc-daygrid-event-dot-width: 5px;
+
+  --fc-button-bg-color: $primary;
+
+  --fc-today-bg-color: rgba(0, 0, 0, 0.1);
+}
+
+.fc-button {
+  border-radius: 0.75rem !important;
+  height: 2rem !important;
+  padding-top: 0.15rem !important;
+}
+
+.fc-daygrid-day-number {
+  color: $primary;
+}
+
+.fc-col-header-cell-cushion {
+  color: $primary;
+}
+
+.fc-day-today,
+.fc-list-empty {
+  box-shadow: inset 0 0 24px -8px rgba(0, 0, 0, 0.5);
+}
