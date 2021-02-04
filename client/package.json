@@ -18,7 +18,10 @@
     "buefy": "^0.9.4",
     "bulma-popover": "git+https://github.com/apnsngr/bulma-popover.git",
     "core-js": "^3.6.5",
+    "crypto-js": "^4.0.0",
     "vue": "^2.6.11",
+    "vue-cookies": "^1.7.4",
+    "vue-router": "^3.5.1",
     "vuex": "^3.6.2"
   },
   "devDependencies": {

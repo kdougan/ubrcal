@@ -1,0 +1,117 @@
+type Account @collection(name: "accounts") {
+  username: String!
+  user: User!
+  type: AccountType!
+}
+
+enum AccountType {
+  email
+}
+
+type AuthPayload @embedded {
+  token: String!
+  User: User!
+}
+
+type User @collection(name: "users") {
+  alias: String!
+  avatar: String!
+  public: Boolean!
+  meta: UserMeta!
+  calendars: [Calendar!]! @relation
+  subscriptions: [UserSub!]! @relation(name: "user_subscribed_from")
+  subscribers: [UserSub!]! @relation(name: "user_subscribed_to")
+}
+
+type UserMeta @collection(name: "user_metas") {
+  name: String!
+  email: String!
+  dob: Date!
+  userPrefs: [UserPref!]!
+  calendarPrefs: [CalendarPref!]!
+  entryPrefs: [EventPref!]!
+}
+
+type UserPref @collection(name: "user_prefs") {
+  meta: UserMeta! @relation
+  user: User!
+  displayName: String
+  hidden: Boolean!
+  group: String
+}
+
+type CalendarPref @collection(name: "calendar_prefs") {
+  meta: UserMeta! @relation
+  calendar: Calendar!
+  color: String!
+  hidden: Boolean!
+}
+
+type EventPref @collection(name: "entry_prefs") {
+  meta: UserMeta! @relation
+  entry: Entry!
+}
+
+type Calendar @collection(name: "calendars") {
+  user: [User!]! @relation
+  name: String!
+  public: Boolean!
+  entries: [Entry!]! @relation
+  deleted: Boolean!
+}
+
+type Entry @collection(name: "entries") {
+  calendar: Calendar! @relation
+  title: String!
+  description: String
+  startTime: Time!
+  startDate: Date!
+  endTime: Time!
+  endDate: Date!
+  rrule: String
+  groups: [Group!]! @relation
+}
+
+type Group @collection(name: "groups") {
+  entry: Entry! @relation
+  name: String
+  open: Boolean!
+  order: Int!
+  groupMembers: [GroupMember!]! @relation
+}
+
+type GroupMember @collection(name: "group_memebers") {
+  group: Group! @relation
+  user: User!
+  state: UserGroupState!
+  order: Int!
+}
+
+enum UserGroupState {
+  pending
+  invited
+  approved
+  denied
+  banned
+}
+
+type UserSub @collection(name: "user_subs") {
+  from: User! @relation(name: "user_subscribed_from")
+  to: User! @relation(name: "user_subscribed_to")
+  state: UserSubState!
+}
+
+enum UserSubState {
+  active
+  cancelled
+}
+
+type Query {
+  currentUser: User @resolver(name: "current_user")
+  allUsers: [User!]! @resolver(name: "all_users", paginated: true)
+  usersForCurrentUser: [User!]! @resolver(name: "users_for_current_user")
+  entriesForCurrentUserAndDateRange(
+    startDate: Date!
+    endDate: Date!
+  ): [Entry!]! @resolver(name: "entries_for_current_user_and_date_range")
+}

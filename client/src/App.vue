@@ -1,27 +1,32 @@
 <template>
   <div id="app" class="app has-background-dark">
-    <Sidebar />
-    <Calendar />
-    <!-- <EventPanel /> -->
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Sidebar from './components/layout/Sidebar';
-import Calendar from './components/Calendar';
-// import EventPanel from './components/EventPanel';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'App',
-  components: {
-    Sidebar,
-    Calendar,
-    // EventPanel,
+  computed: {
+    ...mapGetters(['loggedIn', 'user']),
   },
   methods: {
-    submit(form) {
-      this.$store.dispatch('createUser', form);
-    },
+    ...mapActions(['getCurrentUser']),
+  },
+  created() {
+    if (this.loggedIn) {
+      this.getCurrentUser().then(() => {
+        if (this.hasUser) {
+          console.log("this.$router.push('calendar')");
+          this.$router.push('calendar');
+        } else {
+          console.log("this.$router.push('createUser')");
+          this.$router.push('createUser');
+        }
+      });
+    }
   },
 };
 </script>
@@ -35,7 +40,7 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: red;
+  background-color: hsl(0, 100%, 15%);
 }
 .app {
   display: flex;
@@ -43,6 +48,6 @@ body {
   width: 100%;
   height: 100%;
   overscroll-behavior: contain;
-  background-color: hsl(0, 100%, 21%);
+  background-color: hsl(0, 100%, 15%);
 }
 </style>

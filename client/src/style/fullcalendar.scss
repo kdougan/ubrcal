@@ -1,10 +1,9 @@
-@import '/src/style/ubrcal.scss';
-
 :root {
   --fc-border-color: rgba(0, 0, 0, 0.5);
   --fc-daygrid-event-dot-width: 5px;
 
-  --fc-button-bg-color: $primary;
+  --fc-button-bg-color: var(--uc-primary-color);
+  --fc-button-hover-bg-color: var(--uc-primary-color-dark);
 
   --fc-today-bg-color: rgba(0, 0, 0, 0.1);
 }
@@ -16,11 +15,11 @@
 }
 
 .fc-daygrid-day-number {
-  color: $primary;
+  color: var(--uc-primary-color);
 }
 
 .fc-col-header-cell-cushion {
-  color: $primary;
+  color: var(--uc-primary-color);
 }
 
 .fc-day-today,

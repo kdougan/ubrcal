@@ -31,7 +31,11 @@
         </b-field>
 
         <b-field class="pt-3">
-          <b-button class="is-medium is-primary is-fullwidth" @click="submit">
+          <b-button
+            class="is-medium is-primary is-fullwidth"
+            @click="submit"
+            :loading="loading"
+          >
             Let's Go!
           </b-button>
         </b-field>
@@ -42,10 +46,13 @@
 
 <script>
 export default {
+  props: {
+    loading: Boolean,
+  },
   data: () => ({
     name: '',
     alias: '',
-    dob: new Date(),
+    dob: null,
   }),
   methods: {
     submit() {

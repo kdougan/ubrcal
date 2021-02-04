@@ -43,7 +43,7 @@ export default {
 </script>
 
 <style>
-@import '../style/fullcalendar.scss';
+@import '../../style/fullcalendar.scss';
 
 .calendar-container {
   width: 100%;
